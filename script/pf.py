@@ -7,8 +7,8 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.textEdit.setText('k')
         self.press.clicked.connect(self.run_script)
+
 
     def run_script(self):
        # Получите значение параметра из элемента управления
