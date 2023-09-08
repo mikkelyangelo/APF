@@ -13,14 +13,16 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
         self.press.setDisabled(True)
 
+        self.coordCheck.setChecked(True)
+        self.lineEdit.hide()
         self.default_k = self.line_k_res.text()
         self.default_a = self.line_a_att.text()
         self.default_line = self.lineEdit.text()
 
-        self.progressBar.hide()
-
         self.line_a_att.installEventFilter(self)
+        self.line_a_att.textChanged.connect(self.press_ability)
         self.line_k_res.installEventFilter(self)
+        self.line_k_res.textChanged.connect(self.press_ability)
         self.lineEdit.installEventFilter(self)
 
         self.autoParam.installEventFilter(self)
@@ -37,11 +39,15 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 self.press.setDisabled(False)
             elif self.line_a_att.text() != self.default_a and self.line_k_res != self.default_k:
                 self.press.setDisabled(False)
+            else:
+                self.press.setDisabled(True)
         elif self.autoParam.isChecked():
             if self.coordCheck.isChecked():
                 self.press.setDisabled(False)
             elif self.lineEdit.text() != self.default_line:
-                self.press.setDisabled()
+                self.press.setDisabled(False)
+            else:
+                self.press.setDisabled(True)
         else:
             self.press.setDisabled(True)
 
@@ -94,13 +100,17 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         super().focusOutEvent(event)
 
     def run_script(self):
+        s = 0
         if self.autoParam.isChecked():
-            a = 50000
-            k = 15
+            a = 10
+            k = 50000
         else:
             a = self.line_a_att.text()
             k = self.line_k_res.text()
-        mipf(k, a)
+        if not self.coordCheck.isChecked():
+            s = self.lineEdit.text()
+        mipf(k, a, s)
+
 
 def main():
     app = QtWidgets.QApplication(sys.argv)

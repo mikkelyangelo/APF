@@ -16,7 +16,6 @@ step = 1
 dstep = 50
 dynamic_on = False
 ax3d_on = True
-list_of_obs = {str(i): [random.randint(0, 99) for _ in range(2)] for i in range(n)}
 # list_of_obs = {1: (5, 50), 2: (80, 12), 3: (40, 50), 4: (60, 35), 5: (35, 35), 6: (56, 75), 7: (73, 72)}
 
 step_2 = 1
@@ -24,7 +23,7 @@ step_2 = 1
 
 class Field:
 
-    def __init__(self, k, a, iters=2000, start=(1/step_2, 1/step_2), end=(99/step_2, 99/step_2)):
+    def __init__(self, k, a, s, iters=2000, start=(1/step_2, 1/step_2), end=(99/step_2, 99/step_2)):
         self.size = 100
         self.start = self._prepare_start_end(start)
         self.end = self._prepare_start_end(end)
@@ -36,6 +35,26 @@ class Field:
         self.end_ = end
         self.k = int(k)
         self.a = int(a)
+        self.obstacles = self.obs_get(s)
+
+    def obs_get(self, s):
+        if s == 0:
+            return {str(i): [random.randint(0, 99) for _ in range(2)] for i in range(n)}
+        else:
+            length = len(s)
+            integers = []
+            a = {}
+            i = 0
+            while i < length:
+                s_int = ''
+                while i < length and '0' <= s[i] <= '9':
+                    s_int += s[i]
+                    i += 1
+                i += 1
+                if s_int != '':
+                    integers.append(int(s_int))
+
+            return {str(j): [integers[j], integers[j+1]] for j in range(0, len(integers), 2)}
 
     def _prepare_start_end(self, obj):
         """Преобразование координат """
@@ -55,17 +74,17 @@ class Field:
         #         list_of_obs[5] = (35 - i, 35 - i)
         #     if i <= 100:
         #         list_of_obs[1] = (1 + i, 50 - i)
-        for obs in list_of_obs.keys():
-            x = int(list_of_obs[obs][0])
-            y = int(list_of_obs[obs][1])
+        for obs in self.obstacles.keys():
+            x = int(self.obstacles[obs][0])
+            y = int(self.obstacles[obs][1])
             self.field[self.size - y - 1][x].is_polygon = 1
 
     def find_distances(self):
 
         points_list = {}
-        for i in list_of_obs.keys():
-            x = list_of_obs[i][0]
-            y = self.size - list_of_obs[i][1] - 1
+        for i in self.obstacles.keys():
+            x = self.obstacles[i][0]
+            y = self.size - self.obstacles[i][1] - 1
             points_list[str(i)] = [x, y]
 
         for y in range(self.size):

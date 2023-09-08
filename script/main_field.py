@@ -8,9 +8,9 @@ START = (1, 1)
 END = (99, 99)
 
 
-def mipf(a, b):
+def mipf(a, b, c):
     stat_time = time.time()
-    field = Field(a,b, MAX_ITERS, START, END)
+    field = Field(a, b, c, MAX_ITERS, START, END)
     field.get_barriers(1)
     field.find_distances()
     field.field_potential_fill()
