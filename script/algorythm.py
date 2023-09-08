@@ -8,8 +8,8 @@ from cell import Cell
 
 #параметризация
 
-k_res = 50000
-k_att = 5
+# k_res = 50000
+# k_att = 5
 radius = 50
 n = 20
 step = 1
@@ -24,7 +24,7 @@ step_2 = 1
 
 class Field:
 
-    def __init__(self, iters=2000, start=(1/step_2, 1/step_2), end=(99/step_2, 99/step_2)):
+    def __init__(self, k, a, iters=2000, start=(1/step_2, 1/step_2), end=(99/step_2, 99/step_2)):
         self.size = 100
         self.start = self._prepare_start_end(start)
         self.end = self._prepare_start_end(end)
@@ -34,6 +34,8 @@ class Field:
         self._fill_field()
         self.start_ = start
         self.end_ = end
+        self.k = int(k)
+        self.a = int(a)
 
     def _prepare_start_end(self, obj):
         """Преобразование координат """
@@ -86,10 +88,10 @@ class Field:
                 # if cell.is_polygon != 1:
                 for distance in cell.distances:
                     if distance != 0:
-                        cell.capability += 1 / 2 * k_res * pow(((1 / distance - 1 / radius)), 2)
+                        cell.capability += 1 / 2 * self.k * pow(((1 / distance - 1 / radius)), 2)
                     else:
-                        cell.capability += 1 / 2 * k_res * 1.2 * pow(((1 / (distance + 1) - 1 / radius)), 2)
-                cell.capability += 1 / 2 * k_att * cell.evcl_distance ** 2
+                        cell.capability += 1 / 2 * self.k * 1.2 * pow(((1 / (distance + 1) - 1 / radius)), 2)
+                cell.capability += 1 / 2 * self.a * cell.evcl_distance ** 2
 
     def _get_neighbours(self, cell):
         """Получение соседей клетки."""

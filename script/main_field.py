@@ -1,17 +1,16 @@
 import time
 
 from algorythm import Field
+
 SIZE = 10
 MAX_ITERS = 10000
 START = (1, 1)
 END = (99, 99)
 
 
-def mainn():
+def mipf(a, b):
     stat_time = time.time()
-    field = Field(MAX_ITERS, START, END)
-
-    print("Size:", field.size, 'x', field.size)
+    field = Field(a,b, MAX_ITERS, START, END)
     field.get_barriers(1)
     field.find_distances()
     field.field_potential_fill()
@@ -22,6 +21,5 @@ def mainn():
     field.show_3d_capability(way)
 
 
-
 if __name__ == '__main__':
-    main()
+    mipf()
