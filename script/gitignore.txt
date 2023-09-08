@@ -1,0 +1,7 @@
+.idea
+__pycache__
+ATP
+venv
+dist
+build
+setup.py
